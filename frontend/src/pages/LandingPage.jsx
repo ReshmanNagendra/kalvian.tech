@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import JarvisCore from '../components/ui/JarvisCore'
 
 export default function LandingPage() {
   const features = [
@@ -46,61 +47,55 @@ export default function LandingPage() {
     }
   ]
 
-  const stats = [
-    { number: '21', label: 'Universities' },
-    { number: '1000+', label: 'Students' },
-    { number: '7', label: 'Core Features' },
-    { number: '100%', label: 'Free' }
-  ]
+
 
   return (
     <div className="min-h-screen bg-surface text-text-primary flex flex-col relative overflow-hidden">
+
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20 pb-16 relative z-10">
+      <section className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 px-4 py-20 pb-16 relative z-10">
         
-        {/* Launch Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 font-medium text-sm mb-8 ring-1 ring-brand-500/20">
-          <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-          Live now
+        {/* Left Column: Text */}
+        <div className="flex-1 text-center lg:text-left pt-10 lg:pt-0">
+          {/* Launch Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 font-medium text-sm mb-8 ring-1 ring-brand-500/20">
+            <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+            Live now
+          </div>
+
+          {/* Tagline */}
+          <p className="text-brand-500 font-bold tracking-wider uppercase text-sm mb-4">
+            The platform Kalvium students actually need
+          </p>
+
+          {/* Headline */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
+            Stop fighting the portal. <br className="hidden md:block lg:hidden xl:block"/> Start owning your semester.
+          </h1>
+
+          {/* Subtext */}
+          <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+            Built by students who got tired of confusing UIs, scattered resources, and zero cross-campus connection.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
+            <Link to="/dashboard" className="w-full sm:w-auto px-8 py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-lg transition-all shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:-translate-y-0.5">
+              Get Started
+            </Link>
+            <a href="#features" className="w-full sm:w-auto px-8 py-3.5 bg-transparent border-[1.5px] border-surface-border hover:border-brand-600 text-text-primary font-medium rounded-lg transition-all hover:-translate-y-0.5">
+              View Features
+            </a>
+          </div>
         </div>
 
-        {/* Tagline */}
-        <p className="text-brand-500 font-bold tracking-wider uppercase text-sm mb-4">
-          The platform Kalvium students actually need
-        </p>
-
-        {/* Headline */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl mx-auto leading-tight">
-          Stop fighting the portal. <br className="hidden md:block"/> Start owning your semester.
-        </h1>
-
-        {/* Subtext */}
-        <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-          Built by students who got tired of confusing UIs, scattered resources, and zero cross-campus connection.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-          <Link to="/dashboard" className="w-full sm:w-auto px-8 py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-lg transition-all shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:-translate-y-0.5">
-            Get Started
-          </Link>
-          <a href="#features" className="w-full sm:w-auto px-8 py-3.5 bg-transparent border-[1.5px] border-surface-border hover:border-brand-600 text-text-primary font-medium rounded-lg transition-all hover:-translate-y-0.5">
-            View Features
-          </a>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-12 border-y border-surface-border bg-surface">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-surface-border">
-          {stats.map((stat) => (
-             <div key={stat.label} className="text-center px-4">
-                <p className="text-4xl md:text-5xl font-bold text-brand-500 mb-2">{stat.number}</p>
-                <p className="text-sm text-text-secondary font-medium tracking-wide uppercase">{stat.label}</p>
-             </div>
-          ))}
+        {/* Right Column: Animation */}
+        <div className="flex-1 w-full max-w-[600px] lg:max-w-none hidden sm:flex items-center justify-center mt-12 lg:mt-0 relative">
+          <JarvisCore />
         </div>
       </section>
+
+
 
       {/* Features Grid */}
       <section id="features" className="py-24 max-w-7xl mx-auto px-4 w-full">
