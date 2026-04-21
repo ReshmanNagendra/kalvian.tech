@@ -45,6 +45,20 @@ export default function JarvisCore() {
             {/* Mini orbit inside core */}
             <div className="absolute w-12 h-12 rounded-full border-t-2 border-brand-300/60 animate-[spin_2s_linear_infinite]" />
         </div>
+
+        {/* Label Overlay */}
+        <div className="absolute bottom-4 right-4 sm:bottom-0 sm:right-0 text-right">
+          <div className="flex flex-col">
+            <span className="text-[10px] sm:text-xs font-bold text-brand-400 uppercase tracking-[0.2em] mb-0.5">
+              The Kalvian Core
+            </span>
+            <span className="text-[8px] sm:text-[10px] text-text-secondary font-medium opacity-70">
+              Powering your entire semester
+            </span>
+          </div>
+          {/* Decorative line */}
+          <div className="h-[1px] w-12 bg-gradient-to-l from-brand-500/50 to-transparent mt-2 ml-auto" />
+        </div>
       </div>
     </div>
   )
