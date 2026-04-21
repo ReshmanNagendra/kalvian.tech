@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
 // --- Mock Data Generator ---
-const UNIVERSITIES = ['LPU', 'Chitkara', 'KLU', 'VIT', 'SRM', 'Manipal']
+const UNIVERSITIES = ['AMET Chennai', 'Alliance Bengaluru', 'Chitkara Baddi', 'Chitkara Rajpura', 'Christ Bengaluru', 'JECRC Jaipur', 'Kalasalingam', 'LPU Punjab', 'Manipal Jaipur', 'MIT-ADT Pune', 'NICHE', 'RV Bengaluru', 'SGT Gurugram', 'SRM Trichy', 'SRM AP', 'St Joseph Chennai', 'Takshashila', 'Apollo Tirupati', 'VISTAS Chennai', 'Yenepoya Bangalore', 'Yenepoya Mangalore']
 const SKILLS = ['React', 'Node.js', 'Python', 'Java', 'DSA', 'C++', 'UI/UX', 'MongoDB']
 const BATCHES = ['2023', '2024', '2025']
 
@@ -159,11 +159,11 @@ export default function SquadHuddle() {
                    {onlineCount} Online Now
                 </span>
              </div>
-             <p className="text-sm text-text-secondary">See who's actively studying. Connect across 23 universities.</p>
+             <p className="text-sm text-text-secondary">See who's actively studying. Connect across 21 universities.</p>
            </div>
 
            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <button onClick={startWarRoom} className="flexitems-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm text-white bg-brand-600 hover:bg-brand-500 transition-colors flex items-center shadow-lg shadow-brand-500/20">
+              <button onClick={startWarRoom} className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm text-white bg-brand-600 hover:bg-brand-500 transition-colors shadow-lg shadow-brand-500/20">
                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 4.5l3-3v13l-3-3" strokeLinecap="round" strokeLinejoin="round"/><rect x="1" y="3" width="11" height="10" rx="2"/></svg>
                  Start War Room
               </button>

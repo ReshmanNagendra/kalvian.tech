@@ -105,7 +105,7 @@ export default function ToolsPage() {
           {tools.map((tool) => (
             <Link
               key={tool.id}
-              to={`/tools/${tool.id}`}
+              to={`/dashboard/tools/${tool.id}`}
               className={`group p-5 rounded-xl bg-surface-card border border-surface-border ${tool.border} transition-all duration-200 hover:translate-y-[-2px]`}
               id={`tool-${tool.id}`}
             >

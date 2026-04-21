@@ -20,7 +20,7 @@ const languageExtensions = {
 function detectLanguage(code) {
   if (/#include\s*<|int\s+main\s*\(|std::|cout|cin/.test(code)) return 'cpp'
   if (/public\s+class|public\s+static\s+void\s+main|System\.out\.println/.test(code)) return 'java'
-  if (/def\s+\w+\s*\(|\bprint\(|:\s*$/.m.test(code)) return 'python'
+  if (/def\s+\w+\s*\(|\bprint\(|:\s*$/.test(code)) return 'python'
   return 'javascript' // Default fallback
 }
 

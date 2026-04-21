@@ -18,7 +18,7 @@ export default function LandingPage() {
     },
     {
       title: 'Squad Huddle',
-      description: 'See who is online across all 23 campuses and spin up instant war rooms.',
+      description: 'See who is online across all 21 campuses and spin up instant war rooms.',
       icon: '👥',
       status: 'Live',
       link: '/dashboard/squad'
@@ -47,16 +47,16 @@ export default function LandingPage() {
   ]
 
   const stats = [
-    { number: '23', label: 'Universities' },
+    { number: '21', label: 'Universities' },
     { number: '1000+', label: 'Students' },
     { number: '7', label: 'Core Features' },
     { number: '100%', label: 'Free' }
   ]
 
   return (
-    <div className="min-h-screen bg-surface text-text-primary flex flex-col">
+    <div className="min-h-screen bg-surface text-text-primary flex flex-col relative overflow-hidden">
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20 pb-16">
+      <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20 pb-16 relative z-10">
         
         {/* Launch Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 font-medium text-sm mb-8 ring-1 ring-brand-500/20">
@@ -66,7 +66,7 @@ export default function LandingPage() {
 
         {/* Tagline */}
         <p className="text-brand-500 font-bold tracking-wider uppercase text-sm mb-4">
-          The platform Kalvium students actually want to use
+          The platform Kalvium students actually need
         </p>
 
         {/* Headline */}
@@ -135,7 +135,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="mt-auto border-t border-surface-border bg-surface-card py-12 text-center text-sm text-text-secondary flex flex-col items-center">
-         <p className="font-medium text-text-primary mb-2">Built by Kalvium students, for Kalvium students ⚡</p>
+         <p className="font-medium text-text-primary mb-2">Built by Kalvian ⚡</p>
          <p className="mb-6">Not officially affiliated with Kalvium.</p>
          
          <div className="flex gap-6 mb-6">

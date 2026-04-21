@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { addResource, getAllResources, updateResource } from '../utils/db'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function ResourceLibrary() {
+  const { currentUser } = useAuth()
   const [resources, setResources] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -96,6 +98,8 @@ export default function ResourceLibrary() {
       createdAt: Date.now(),
       upvotes: 0,
       downvotes: 0,
+      upvoters: [],
+      downvoters: [],
       downloads: 0,
       flags: 0,
     }
@@ -114,10 +118,43 @@ export default function ResourceLibrary() {
   }
 
   const handleVote = async (id, type) => {
+    if (!currentUser) return // Must be logged in to vote
+
     const res = resources.find(r => r.id === id)
     if (!res) return
-    // In a real app, track user ID to prevent multi-voting.
-    const updated = { ...res, [type]: (res[type] || 0) + 1 }
+    
+    // We use email as fallback if uid is somehow missing, though Firebase always gives uid
+    const userId = currentUser.uid || currentUser.email
+    
+    const upvoters = res.upvoters || []
+    const downvoters = res.downvoters || []
+    let newUpvoters = [...upvoters]
+    let newDownvoters = [...downvoters]
+
+    if (type === 'upvotes') {
+      if (newUpvoters.includes(userId)) {
+        newUpvoters = newUpvoters.filter(id => id !== userId) // Toggle off
+      } else {
+        newUpvoters.push(userId) // Add upvote
+        newDownvoters = newDownvoters.filter(id => id !== userId) // Remove existing downvote
+      }
+    } else if (type === 'downvotes') {
+      if (newDownvoters.includes(userId)) {
+        newDownvoters = newDownvoters.filter(id => id !== userId) // Toggle off
+      } else {
+        newDownvoters.push(userId) // Add downvote
+        newUpvoters = newUpvoters.filter(id => id !== userId) // Remove existing upvote
+      }
+    }
+
+    const updated = { 
+      ...res, 
+      upvoters: newUpvoters,
+      downvoters: newDownvoters,
+      upvotes: newUpvoters.length,
+      downvotes: newDownvoters.length
+    }
+    
     await updateResource(updated)
     setResources(prev => prev.map(r => r.id === id ? updated : r))
   }
@@ -283,11 +320,27 @@ export default function ResourceLibrary() {
                      <div className="mt-auto px-3 py-2 bg-surface-elevated rounded-lg flex items-center justify-between border border-surface-border/50">
                         {/* Votes */}
                         <div className="flex items-center gap-3">
-                           <button onClick={() => handleVote(res.id, 'upvotes')} className="flex items-center gap-1 text-[11px] font-medium text-text-secondary hover:text-brand-400 transition-colors">
+                           <button 
+                             onClick={() => handleVote(res.id, 'upvotes')} 
+                             disabled={!currentUser}
+                             className={`flex items-center gap-1 text-[11px] font-medium transition-colors ${
+                               currentUser && (res.upvoters || []).includes(currentUser.uid || currentUser.email)
+                                 ? 'text-brand-400'
+                                 : 'text-text-secondary hover:text-brand-400 disabled:opacity-50 disabled:cursor-not-allowed'
+                             }`}
+                           >
                               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 12V4M4 8l4-4 4 4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                               <span>{res.upvotes || 0}</span>
                            </button>
-                           <button onClick={() => handleVote(res.id, 'downvotes')} className="flex items-center gap-1 text-[11px] font-medium text-text-secondary hover:text-red-400 transition-colors">
+                           <button 
+                             onClick={() => handleVote(res.id, 'downvotes')} 
+                             disabled={!currentUser}
+                             className={`flex items-center gap-1 text-[11px] font-medium transition-colors ${
+                               currentUser && (res.downvoters || []).includes(currentUser.uid || currentUser.email)
+                                 ? 'text-red-400'
+                                 : 'text-text-secondary hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed'
+                             }`}
+                           >
                               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 4v8M4 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                               <span>{res.downvotes || 0}</span>
                            </button>

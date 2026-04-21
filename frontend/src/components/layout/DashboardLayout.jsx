@@ -1,7 +1,18 @@
+import { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
 export default function DashboardLayout() {
   const location = useLocation()
+  const [collapsed, setCollapsed] = useState(() => {
+    // Persist preference
+    return localStorage.getItem('kalvian_sidebar') === 'collapsed'
+  })
+
+  const toggle = () => {
+    const next = !collapsed
+    setCollapsed(next)
+    localStorage.setItem('kalvian_sidebar', next ? 'collapsed' : 'expanded')
+  }
   
   const navItems = [
     { name: 'Focus Workspace', path: '/dashboard/workspace', icon: '💻' },
@@ -15,40 +26,78 @@ export default function DashboardLayout() {
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100vh-3.5rem)] bg-surface text-text-primary">
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-surface-card border-r border-b md:border-b-0 border-surface-border flex-shrink-0">
-        <div className="p-4 border-b border-surface-border hidden md:block">
-           <h2 className="text-sm font-bold text-text-secondary uppercase tracking-wider">Dashboard</h2>
+      <aside
+        className={`bg-surface-card border-r border-b md:border-b-0 border-surface-border flex-shrink-0 transition-all duration-300 ease-in-out ${
+          collapsed ? 'w-full md:w-[68px]' : 'w-full md:w-64'
+        }`}
+      >
+        {/* Header with collapse toggle */}
+        <div className="px-3 py-3 border-b border-surface-border hidden md:flex items-center justify-between">
+          {!collapsed && (
+            <h2 className="text-sm font-bold text-text-secondary uppercase tracking-wider pl-1 transition-opacity duration-200">
+              Dashboard
+            </h2>
+          )}
+          <button
+            onClick={toggle}
+            className={`p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-elevated transition-colors ${collapsed ? 'mx-auto' : ''}`}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label="Toggle sidebar"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              {collapsed ? (
+                <>
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M9 3v18" />
+                  <path d="M14 9l3 3-3 3" />
+                </>
+              ) : (
+                <>
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M9 3v18" />
+                  <path d="M16 9l-3 3 3 3" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
-        <nav className="p-4 space-y-1 overflow-x-auto md:overflow-x-visible flex md:block whitespace-nowrap">
+
+        <nav className={`p-2 space-y-0.5 overflow-x-auto md:overflow-x-visible flex md:block whitespace-nowrap ${collapsed ? 'items-center' : ''}`}>
           {navItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path)
             return (
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                title={collapsed ? item.name : undefined}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  collapsed ? 'justify-center' : ''
+                } ${
                   isActive 
                     ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' 
                     : 'text-text-secondary hover:bg-surface-elevated hover:text-text-primary border border-transparent'
                 }`}
               >
-                <span>{item.icon}</span>
-                <span>{item.name}</span>
+                <span className="text-base flex-shrink-0">{item.icon}</span>
+                {!collapsed && <span className="truncate">{item.name}</span>}
               </Link>
             )
           })}
           
-          <div className="md:pt-4 md:mt-4 md:border-t border-surface-border inline-block md:block ml-2 md:ml-0">
+          <div className={`md:pt-3 md:mt-3 md:border-t border-surface-border inline-block md:block ${collapsed ? '' : 'ml-0'}`}>
              <Link
                 to="/dashboard/settings"
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                title={collapsed ? 'Profile/Settings' : undefined}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  collapsed ? 'justify-center' : ''
+                } ${
                   location.pathname === '/dashboard/settings'
                     ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' 
                     : 'text-text-secondary hover:bg-surface-elevated hover:text-text-primary border border-transparent'
                 }`}
               >
-                <span>⚙️</span>
-                <span>Profile/Settings</span>
+                <span className="text-base flex-shrink-0">⚙️</span>
+                {!collapsed && <span>Profile/Settings</span>}
               </Link>
           </div>
         </nav>
