@@ -5,7 +5,7 @@ const quickApps = [
   { name: 'Focus Workspace', icon: '💻', path: '/dashboard/workspace', desc: 'Split-screen IDE', color: 'from-emerald-500/20 to-emerald-500/5' },
   { name: 'Attendance', icon: '📊', path: '/dashboard/attendance', desc: 'Skip calculator', color: 'from-amber-500/20 to-amber-500/5' },
   { name: 'Code Vault', icon: '🔒', path: '/dashboard/vault', desc: 'Snippet manager', color: 'from-violet-500/20 to-violet-500/5' },
-  { name: 'Squad Huddle', icon: '👥', path: '/dashboard/squad', desc: 'Live presence', color: 'from-sky-500/20 to-sky-500/5' },
+  { name: 'Squad Huddle', icon: '👥', path: '/dashboard/squad', desc: 'Live presence', color: 'from-sky-500/20 to-sky-500/5', isPrototype: true },
   { name: 'Resources', icon: '📚', path: '/dashboard/resources', desc: 'Study materials', color: 'from-rose-500/20 to-rose-500/5' },
   { name: 'Quick Tools', icon: '🛠️', path: '/dashboard/tools', desc: 'Utilities suite', color: 'from-orange-500/20 to-orange-500/5' },
 ]
@@ -101,12 +101,22 @@ export default function DashboardHome() {
             {quickApps.map(app => (
               <Link
                 key={app.name}
-                to={app.path}
-                className="group relative p-5 rounded-xl bg-surface-card border border-surface-border hover:border-brand-500/30 transition-all duration-300 hover:-translate-y-0.5"
+                to={app.isPrototype ? '#' : app.path}
+                onClick={app.isPrototype ? (e) => e.preventDefault() : undefined}
+                className={`group relative p-5 rounded-xl bg-surface-card border transition-all duration-300 ${
+                  app.isPrototype 
+                    ? 'border-surface-border/50 opacity-60 grayscale cursor-not-allowed' 
+                    : 'border-surface-border hover:border-brand-500/30 hover:-translate-y-0.5'
+                }`}
               >
-                <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${app.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}></div>
+                <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${app.color} opacity-0 ${!app.isPrototype && 'group-hover:opacity-100'} transition-opacity duration-300 pointer-events-none`}></div>
                 <div className="relative z-10">
-                  <span className="text-2xl block mb-3">{app.icon}</span>
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-2xl">{app.icon}</span>
+                    {app.isPrototype && (
+                      <span className="px-1.5 py-0.5 bg-surface-border text-[9px] font-bold text-text-muted uppercase tracking-wider rounded">Soon</span>
+                    )}
+                  </div>
                   <h3 className="text-sm font-semibold text-text-primary mb-0.5">{app.name}</h3>
                   <p className="text-[11px] text-text-muted">{app.desc}</p>
                 </div>

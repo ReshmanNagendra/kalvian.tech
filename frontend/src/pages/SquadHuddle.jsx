@@ -149,6 +149,19 @@ export default function SquadHuddle() {
     <div className="min-h-[calc(100vh-3.5rem)] bg-surface text-text-primary py-8 sm:py-12">
       <div className="max-w-6xl mx-auto px-4">
         
+        {/* Prototype Banner */}
+        <div className="mb-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
+          <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+            <span className="text-xl">🧪</span>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-tight">Feature Prototype</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              Squad Huddle is currently in active development. Features such as real-time sync, campus filtering, and war rooms are in prototype stage and may not be fully functional.
+            </p>
+          </div>
+        </div>
+        
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-surface-border pb-6">
            <div>
