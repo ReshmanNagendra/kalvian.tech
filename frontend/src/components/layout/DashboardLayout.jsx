@@ -19,7 +19,7 @@ export default function DashboardLayout() {
     { name: 'Attendance Calculator', path: '/dashboard/attendance', icon: '📊' },
     { name: 'Quick Utilities', path: '/dashboard/tools', icon: '🛠️' },
     { name: 'Code Vault', path: '/dashboard/vault', icon: '🔒' },
-    { name: 'Squad Huddle', path: '/dashboard/squad', icon: '👥' },
+    { name: 'Squad Huddle', path: '/dashboard/squad', icon: '👥', isPrototype: true },
     { name: 'Resource Library', path: '/dashboard/resources', icon: '📚' }
   ]
 
@@ -68,18 +68,26 @@ export default function DashboardLayout() {
             return (
               <Link
                 key={item.name}
-                to={item.path}
-                title={collapsed ? item.name : undefined}
+                to={item.isPrototype ? '#' : item.path}
+                onClick={item.isPrototype ? (e) => e.preventDefault() : undefined}
+                title={collapsed ? item.name + (item.isPrototype ? ' (Coming Soon)' : '') : undefined}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                   collapsed ? 'justify-center' : ''
                 } ${
-                  isActive 
-                    ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' 
-                    : 'text-text-secondary hover:bg-surface-elevated hover:text-text-primary border border-transparent'
+                  item.isPrototype
+                    ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none'
+                    : isActive 
+                      ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' 
+                      : 'text-text-secondary hover:bg-surface-elevated hover:text-text-primary border border-transparent'
                 }`}
               >
-                <span className="text-base flex-shrink-0">{item.icon}</span>
-                {!collapsed && <span className="truncate">{item.name}</span>}
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-base flex-shrink-0">{item.icon}</span>
+                  {!collapsed && <span className="truncate">{item.name}</span>}
+                </div>
+                {!collapsed && item.isPrototype && (
+                  <span className="ml-auto text-[8px] font-bold bg-surface-border px-1 rounded text-text-muted">SOON</span>
+                )}
               </Link>
             )
           })}

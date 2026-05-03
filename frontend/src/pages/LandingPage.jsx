@@ -21,7 +21,7 @@ export default function LandingPage() {
       title: 'Squad Huddle',
       description: 'See who is online across all 21 campuses and spin up instant war rooms.',
       icon: '👥',
-      status: 'Live',
+      status: 'Prototype',
       link: '/dashboard/squad'
     },
     {
@@ -106,11 +106,16 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
-            <Link 
-               to={feature.link} 
-               key={feature.title} 
-               className="group bg-surface-card border border-surface-border p-6 rounded-xl hover:border-brand-600 transition-all duration-300 hover:-translate-y-1 block text-left"
-            >
+             <Link 
+                to={feature.status === 'Prototype' ? '#' : feature.link} 
+                onClick={feature.status === 'Prototype' ? (e) => e.preventDefault() : undefined}
+                key={feature.title} 
+                className={`group bg-surface-card border p-6 rounded-xl transition-all duration-300 block text-left ${
+                  feature.status === 'Prototype'
+                    ? 'border-surface-border/50 opacity-60 grayscale cursor-not-allowed'
+                    : 'border-surface-border hover:border-brand-600 hover:-translate-y-1'
+                }`}
+             >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-3xl">{feature.icon}</span>
                 <span className="px-2 py-1 text-xs font-semibold bg-brand-500/10 text-brand-400 rounded-md">
