@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import DashboardLayout from './components/layout/DashboardLayout'
@@ -57,6 +58,7 @@ function App() {
             <Route path="tools/color-picker" element={<ColorPicker />} />
           </Route>
         </Routes>
+        <Analytics />
       </div>
     </AuthProvider>
   )
