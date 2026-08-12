@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import DashboardLayout from './components/layout/DashboardLayout'
 import FocusWorkspace from './pages/FocusWorkspace'
-import AttendanceCalculator from './pages/AttendanceCalculator'
+import Attendance from './pages/Attendance'
 import SnippetVault from './pages/SnippetVault'
 import ResourceLibrary from './pages/ResourceLibrary'
 import AdminModeration from './pages/AdminModeration'
@@ -45,7 +45,7 @@ function App() {
             <Route index element={<DashboardHome />} />
             <Route path="settings" element={<Settings />} />
             <Route path="workspace" element={<FocusWorkspace />} />
-            <Route path="attendance" element={<AttendanceCalculator />} />
+            <Route path="attendance" element={<Attendance />} />
             <Route path="squad" element={<SquadHuddle />} />
             <Route path="vault" element={<SnippetVault />} />
             <Route path="resources" element={<ResourceLibrary />} />

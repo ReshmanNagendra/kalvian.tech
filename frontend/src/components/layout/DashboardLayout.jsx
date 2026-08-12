@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function DashboardLayout() {
   const location = useLocation()
@@ -7,6 +8,7 @@ export default function DashboardLayout() {
     // Persist preference
     return localStorage.getItem('kalvian_sidebar') === 'collapsed'
   })
+  const { currentUser } = useAuth()
 
   const toggle = () => {
     const next = !collapsed
@@ -16,7 +18,7 @@ export default function DashboardLayout() {
   
   const navItems = [
     { name: 'Focus Workspace', path: '/dashboard/workspace', icon: '💻' },
-    { name: 'Attendance Calculator', path: '/dashboard/attendance', icon: '📊' },
+    { name: 'Attendance', path: '/dashboard/attendance', icon: '📊' },
     { name: 'Quick Utilities', path: '/dashboard/tools', icon: '🛠️' },
     { name: 'Code Vault', path: '/dashboard/vault', icon: '🔒' },
     { name: 'Squad Huddle', path: '/dashboard/squad', icon: '👥', isPrototype: true },
@@ -25,6 +27,9 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100vh-3.5rem)] bg-surface text-text-primary">
+      {/* Hidden div to expose UID to the Chrome Extension */}
+      <div id="kalvian-user-uid" data-uid={currentUser?.uid || ''} style={{ display: 'none' }}></div>
+      
       {/* Sidebar Navigation */}
       <aside
         className={`bg-surface-card border-r border-b md:border-b-0 border-surface-border flex-shrink-0 transition-all duration-300 ease-in-out ${
