@@ -1,61 +1,114 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-// Mock data for the calendar grid
-// Nov 2023 started on Wednesday, has 30 days.
-// Prev month days: 29, 30, 31 (Sun, Mon, Tue)
-const calendarDays = [
-  { day: 29, isCurrentMonth: false, events: [] },
-  { day: 30, isCurrentMonth: false, events: [] },
-  { day: 31, isCurrentMonth: false, events: [] },
-  { day: 1, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: 'CS301' },
-  { day: 2, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'absent' }], text: '4/5 present' },
-  { day: 3, isCurrentMonth: true, events: [{ type: 'present' }], text: '8/8 present' },
-  { day: 4, isCurrentMonth: true, events: [] },
-  { day: 5, isCurrentMonth: true, events: [] },
-  { day: 6, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: '5/5 present' },
-  { day: 7, isCurrentMonth: true, events: [{ type: 'present' }], text: '8/8 present' },
-  { day: 8, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }, { type: 'absent' }], text: '8/8 present' },
-  { day: 9, isCurrentMonth: true, events: [] },
-  { day: 10, isCurrentMonth: true, events: [] },
-  { day: 11, isCurrentMonth: true, events: [] },
-  { day: 12, isCurrentMonth: true, events: [] },
-  { day: 13, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: '5/5 present' },
-  { day: 14, isCurrentMonth: true, events: [{ type: 'present' }], text: '5/5 present' },
-  { day: 15, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'absent' }], text: '8/8 present' },
-  { day: 16, isCurrentMonth: true, events: [] },
-  { day: 17, isCurrentMonth: true, events: [] },
-  { day: 18, isCurrentMonth: true, events: [] },
-  { day: 19, isCurrentMonth: true, events: [] },
-  { day: 20, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: '0/0 present' },
-  { day: 21, isCurrentMonth: true, events: [{ type: 'present' }], text: '8/8 present' },
-  { day: 22, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: '8/8 present' },
-  { day: 23, isCurrentMonth: true, events: [] },
-  { day: 24, isCurrentMonth: true, events: [] },
-  { day: 25, isCurrentMonth: true, events: [] },
-  { day: 26, isCurrentMonth: true, events: [] },
-  { day: 27, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'present' }], text: '8/8 present' },
-  { day: 28, isCurrentMonth: true, events: [{ type: 'present' }], text: '8/8 present' },
-  { day: 29, isCurrentMonth: true, events: [{ type: 'present' }, { type: 'absent' }], text: '8/8 present' },
-  { day: 30, isCurrentMonth: true, events: [{ type: 'present' }], text: '8/8 present' },
-  { day: 1, isCurrentMonth: false, events: [] },
-  { day: 2, isCurrentMonth: false, events: [] },
-];
+export default function CalendarView({ data, historyData = [], excludedSubjects = [] }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-export default function CalendarView({ data }) {
-  // For now, fallback to mock data until we implement the calendar parser for the real scraped data
-  const hasRealData = data && data.length > 0;
+  // Navigation
+  const prevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
   
-  // Calculate real stats if available (assuming data contains subjects with records)
-  let totalAttended = 42;
-  let totalMissed = 3;
-  let overallPercent = 93.3;
+  const nextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
 
-  if (hasRealData) {
-    totalAttended = data.reduce((sum, sub) => sum + (sub.attended || 0), 0);
-    const totalClasses = data.reduce((sum, sub) => sum + (sub.total || 0), 0);
-    totalMissed = totalClasses - totalAttended;
-    overallPercent = totalClasses > 0 ? ((totalAttended / totalClasses) * 100).toFixed(1) : 0;
-  }
+  // Generate Calendar Grid
+  const calendarDays = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+    
+    const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 (Sun) to 6 (Sat)
+    const totalDaysInMonth = lastDayOfMonth.getDate();
+    
+    const days = [];
+    
+    // Previous month padding
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+      days.push({
+        day: prevMonthLastDay - i,
+        isCurrentMonth: false,
+        dateStr: null,
+        events: []
+      });
+    }
+    
+    // Current month days
+    for (let i = 1; i <= totalDaysInMonth; i++) {
+      // Format YYYY-MM-DD
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+      
+      // Find history data for this day
+      const dayData = historyData.find(d => d.date === dateStr);
+      let events = [];
+      let text = '';
+      
+      if (dayData && dayData.subjects) {
+        // Filter out excluded
+        const activeSubs = dayData.subjects.filter(sub => !excludedSubjects.includes(sub.code));
+        
+        events = activeSubs.map(sub => ({
+          type: sub.attended ? 'present' : (sub.total > 0 ? 'absent' : 'upcoming')
+        })).filter(e => e.type !== 'upcoming');
+        
+        const attended = activeSubs.reduce((sum, sub) => sum + (sub.attended || 0), 0);
+        const total = activeSubs.reduce((sum, sub) => sum + (sub.total || 0), 0);
+        
+        if (total > 0) {
+          text = `${attended}/${total} present`;
+        }
+      }
+      
+      days.push({
+        day: i,
+        isCurrentMonth: true,
+        dateStr,
+        events,
+        text
+      });
+    }
+    
+    // Next month padding
+    const remainingCells = 42 - days.length; // 6 rows of 7
+    for (let i = 1; i <= remainingCells; i++) {
+      days.push({
+        day: i,
+        isCurrentMonth: false,
+        dateStr: null,
+        events: []
+      });
+    }
+    
+    return days;
+  }, [currentDate, historyData, excludedSubjects]);
+
+  // Calculate real stats for the viewed month
+  const monthStats = useMemo(() => {
+    let attended = 0;
+    let totalClasses = 0;
+    
+    const year = currentDate.getFullYear();
+    const monthStr = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const prefix = `${year}-${monthStr}`;
+
+    historyData.forEach(day => {
+      if (day.date.startsWith(prefix) && day.subjects) {
+        const activeSubs = day.subjects.filter(sub => !excludedSubjects.includes(sub.code));
+        attended += activeSubs.reduce((sum, sub) => sum + (sub.attended || 0), 0);
+        totalClasses += activeSubs.reduce((sum, sub) => sum + (sub.total || 0), 0);
+      }
+    });
+
+    const missed = totalClasses - attended;
+    const percent = totalClasses > 0 ? ((attended / totalClasses) * 100).toFixed(1) : 0;
+    
+    return { attended, missed, percent };
+  }, [currentDate, historyData, excludedSubjects]);
+
+  const monthName = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
     <div className="flex flex-col lg:flex-row w-full gap-8">
@@ -63,24 +116,24 @@ export default function CalendarView({ data }) {
       <div className="w-full lg:w-80 shrink-0 flex flex-col gap-6">
         <div className="p-6 rounded-xl bg-surface-card border border-surface-border">
           <h2 className="text-xl font-bold text-text-primary mb-1">Attendance<br/>Summary</h2>
-          <p className="text-sm text-text-muted mb-8">November 2023</p>
+          <p className="text-sm text-text-muted mb-8">{monthName}</p>
           
           <div className="space-y-4 mb-8">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-text-secondary">Classes Attended</span>
-              <span className="text-base font-bold text-brand-400">{totalAttended}</span>
+              <span className="text-base font-bold text-brand-400">{monthStats.attended}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-text-secondary">Classes Missed</span>
-              <span className="text-base font-bold text-red-400">{totalMissed}</span>
+              <span className="text-base font-bold text-red-400">{monthStats.missed}</span>
             </div>
           </div>
 
           <div>
             <p className="text-xs font-medium text-text-secondary mb-2">Overall % for Month</p>
-            <div className="text-4xl font-bold text-brand-400 mb-3">{overallPercent}%</div>
+            <div className="text-4xl font-bold text-brand-400 mb-3">{monthStats.percent}%</div>
             <div className="h-1.5 w-full rounded-full bg-surface-elevated overflow-hidden">
-              <div className="h-full bg-brand-500 rounded-full" style={{ width: `${overallPercent}%` }}></div>
+              <div className="h-full bg-brand-500 rounded-full" style={{ width: `${monthStats.percent}%` }}></div>
             </div>
           </div>
         </div>
@@ -109,13 +162,13 @@ export default function CalendarView({ data }) {
         {/* Calendar Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-4">
-            <button className="text-text-muted hover:text-text-primary transition-colors">
+            <button onClick={prevMonth} className="text-text-muted hover:text-text-primary transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
             </button>
-            <h2 className="text-lg font-bold text-text-primary">November 2023</h2>
-            <button className="text-text-muted hover:text-text-primary transition-colors">
+            <h2 className="text-lg font-bold text-text-primary w-40 text-center">{monthName}</h2>
+            <button onClick={nextMonth} className="text-text-muted hover:text-text-primary transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
@@ -152,7 +205,7 @@ export default function CalendarView({ data }) {
                 <span className="text-sm font-medium text-text-secondary mb-2">{dayObj.day}</span>
                 
                 {dayObj.events.length > 0 && (
-                  <div className="flex gap-1 mb-2">
+                  <div className="flex flex-wrap gap-1 mb-2">
                     {dayObj.events.map((ev, j) => (
                       <div 
                         key={j} 

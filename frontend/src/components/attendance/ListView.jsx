@@ -74,7 +74,7 @@ function parseTime(timeStr) {
   return hours * 60 + parseInt(minutes, 10);
 }
 
-export default function ListView({ data }) {
+export default function ListView({ data, historyData, excludedSubjects = [], setExcludedSubjects }) {
   // Use real data if provided and not empty, otherwise fallback to mock data for layout purposes
   const hasRealData = data && data.length > 0;
   const displaySubjects = hasRealData ? data : subjects;
@@ -93,13 +93,25 @@ export default function ListView({ data }) {
       })
     : todaysSchedule;
 
-  // Calculate real KPIs if we have data
-  const totalAttended = displaySubjects.reduce((sum, sub) => sum + (sub.attended || 0), 0);
-  const totalClasses = displaySubjects.reduce((sum, sub) => sum + (sub.total || 0), 0);
+  // Filter out excluded subjects for KPI math
+  const activeSubjects = displaySubjects.filter(sub => !excludedSubjects.includes(sub.code));
+
+  // Calculate real KPIs based on active subjects
+  const totalAttended = activeSubjects.reduce((sum, sub) => sum + (sub.attended || 0), 0);
+  const totalClasses = activeSubjects.reduce((sum, sub) => sum + (sub.total || 0), 0);
   const overallPercent = totalClasses > 0 ? Math.round((totalAttended / totalClasses) * 100) : 0;
   
   // Estimate safe margin (how many skips left before dropping below 75%)
   const safeMargin = Math.max(0, Math.floor((totalAttended * 100 / 75) - totalClasses));
+
+  const toggleExclude = (code, checked) => {
+    if (!setExcludedSubjects) return;
+    if (checked) {
+      setExcludedSubjects(excludedSubjects.filter(c => c !== code));
+    } else {
+      setExcludedSubjects([...excludedSubjects, code]);
+    }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row w-full gap-8">
@@ -140,18 +152,31 @@ export default function ListView({ data }) {
           <h2 className="text-sm font-medium text-text-secondary mb-4">Subject Breakdown</h2>
           <div className="space-y-4">
             {displaySubjects.map((subject, idx) => (
-              <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl bg-surface-card border border-surface-border gap-6">
+              <div key={idx} className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl bg-surface-card border border-surface-border gap-6 ${excludedSubjects.includes(subject.code) ? 'opacity-50 grayscale' : ''}`}>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-bold text-text-secondary">{subject.code}</span>
                   </div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">{subject.name}</h3>
-                  <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    Next: {subject.nextClass}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      Next: {subject.nextClass}
+                    </div>
+                    {setExcludedSubjects && (
+                      <label className="flex items-center gap-2 cursor-pointer w-fit text-xs text-text-secondary font-medium">
+                        <input 
+                          type="checkbox"
+                          checked={!excludedSubjects.includes(subject.code)}
+                          onChange={(e) => toggleExclude(subject.code, e.target.checked)}
+                          className="rounded border-surface-border text-brand-500 focus:ring-brand-500/20 bg-surface"
+                        />
+                        Include in overall average
+                      </label>
+                    )}
                   </div>
                 </div>
 
@@ -165,7 +190,10 @@ export default function ListView({ data }) {
                     </div>
                     <ProgressBar percent={subject.percent} status={subject.status} />
                   </div>
-                  <button className="px-4 py-1.5 rounded bg-surface-elevated text-xs font-semibold text-text-primary hover:bg-surface-border transition-colors uppercase tracking-wider shrink-0">
+                  <button 
+                    onClick={() => alert('History details feature coming soon! Check Calendar View for overall history.')}
+                    className="px-4 py-1.5 rounded bg-surface-elevated text-xs font-semibold text-text-primary hover:bg-surface-border transition-colors uppercase tracking-wider shrink-0"
+                  >
                     HISTORY
                   </button>
                 </div>
