@@ -50,6 +50,7 @@ function ProgressBar({ percent, status }) {
     safe: 'bg-brand-500',
     warning: 'bg-amber-500',
     danger: 'bg-red-500',
+    upcoming: 'bg-surface-border',
   };
 
   return (
@@ -82,13 +83,26 @@ export default function ListView({ data, historyData, excludedSubjects = [], set
   // Compute real today's schedule
   const computedSchedule = hasRealData 
     ? [...data].sort((a, b) => parseTime(a.time) - parseTime(b.time)).map(sub => {
-        const isPresent = sub.status === 'safe';
+        let displayStatus = 'ABSENT';
+        let color = 'text-red-400';
+        let dotColor = 'bg-red-400';
+
+        if (sub.status === 'safe') {
+          displayStatus = 'PRESENT';
+          color = 'text-brand-400';
+          dotColor = 'bg-brand-400';
+        } else if (sub.status === 'upcoming') {
+          displayStatus = 'UPCOMING';
+          color = 'text-text-muted';
+          dotColor = 'bg-surface-border';
+        }
+
         return {
           code: sub.name,
           time: sub.time && sub.time !== 'NO-TIME' ? sub.time : 'TBD',
-          status: isPresent ? 'PRESENT' : 'ABSENT',
-          color: isPresent ? 'text-brand-400' : 'text-red-400',
-          dotColor: isPresent ? 'bg-brand-400' : 'bg-red-400'
+          status: displayStatus,
+          color,
+          dotColor
         };
       })
     : todaysSchedule;
@@ -183,10 +197,10 @@ export default function ListView({ data, historyData, excludedSubjects = [], set
                 <div className="flex items-center gap-6 w-full sm:w-auto">
                   <div className="w-full sm:w-48">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className={`text-sm font-bold ${subject.status === 'safe' ? 'text-brand-400' : 'text-red-400'}`}>
-                        {subject.percent}%
+                      <span className={`text-sm font-bold ${subject.status === 'safe' ? 'text-brand-400' : (subject.status === 'upcoming' ? 'text-text-muted' : 'text-red-400')}`}>
+                        {subject.status === 'upcoming' ? '--' : `${subject.percent}%`}
                       </span>
-                      <span className="text-[10px] font-medium text-text-muted">{subject.attended}/{subject.total} Attended</span>
+                      <span className="text-[10px] font-medium text-text-muted">{subject.status === 'upcoming' ? 'Upcoming' : `${subject.attended}/${subject.total} Attended`}</span>
                     </div>
                     <ProgressBar percent={subject.percent} status={subject.status} />
                   </div>
