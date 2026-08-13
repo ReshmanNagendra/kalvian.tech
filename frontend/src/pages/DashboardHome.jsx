@@ -4,17 +4,13 @@ import { useAuth } from '../contexts/AuthContext'
 const quickApps = [
   { name: 'Focus Workspace', icon: '💻', path: '/dashboard/workspace', desc: 'Split-screen IDE', color: 'from-emerald-500/20 to-emerald-500/5' },
   { name: 'Attendance', icon: '📊', path: '/dashboard/attendance', desc: 'Attendance tracker', color: 'from-amber-500/20 to-amber-500/5' },
-  { name: 'Code Vault', icon: '🔒', path: '/dashboard/vault', desc: 'Snippet manager', color: 'from-violet-500/20 to-violet-500/5' },
-  { name: 'Squad Huddle', icon: '👥', path: '/dashboard/squad', desc: 'Live presence', color: 'from-sky-500/20 to-sky-500/5', isPrototype: true },
   { name: 'Resources', icon: '📚', path: '/dashboard/resources', desc: 'Study materials', color: 'from-rose-500/20 to-rose-500/5' },
   { name: 'Quick Tools', icon: '🛠️', path: '/dashboard/tools', desc: 'Utilities suite', color: 'from-orange-500/20 to-orange-500/5' },
 ]
 
 const tips = [
   "Use the Focus Workspace to keep your Dojo problem visible while coding.",
-  "Save your best DSA solutions in the Code Vault for open-book exams.",
   "Check the Attendance tracker to see your current standing and safe margin.",
-  "Start a War Room from Squad Huddle to study with peers across campuses.",
   "Upload your notes to Resource Library — help your batch, earn upvotes.",
 ]
 
