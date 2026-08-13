@@ -18,20 +18,6 @@ export default function LandingPage() {
       link: '/dashboard/attendance'
     },
     {
-      title: 'Squad Huddle',
-      description: 'See who is online across all 21 campuses and spin up instant war rooms.',
-      icon: '👥',
-      status: 'Prototype',
-      link: '/dashboard/squad'
-    },
-    {
-      title: 'Snippet Vault',
-      description: 'Save and tag your best DSA algorithms for open-book exam prep.',
-      icon: '🔒',
-      status: 'Live',
-      link: '/dashboard/vault'
-    },
-    {
       title: 'Resource Library',
       description: 'Crowd-sourced PDFs and cheatsheets. Upvote the best materials.',
       icon: '📚',

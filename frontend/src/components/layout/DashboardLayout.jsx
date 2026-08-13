@@ -20,8 +20,6 @@ export default function DashboardLayout() {
     { name: 'Focus Workspace', path: '/dashboard/workspace', icon: '💻' },
     { name: 'Attendance', path: '/dashboard/attendance', icon: '📊' },
     { name: 'Quick Utilities', path: '/dashboard/tools', icon: '🛠️' },
-    { name: 'Code Vault', path: '/dashboard/vault', icon: '🔒' },
-    { name: 'Squad Huddle', path: '/dashboard/squad', icon: '👥', isPrototype: true },
     { name: 'Resource Library', path: '/dashboard/resources', icon: '📚' }
   ]
 

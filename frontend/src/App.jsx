@@ -5,10 +5,8 @@ import LandingPage from './pages/LandingPage'
 import DashboardLayout from './components/layout/DashboardLayout'
 import FocusWorkspace from './pages/FocusWorkspace'
 import Attendance from './pages/Attendance'
-import SnippetVault from './pages/SnippetVault'
 import ResourceLibrary from './pages/ResourceLibrary'
 import AdminModeration from './pages/AdminModeration'
-import SquadHuddle from './pages/SquadHuddle'
 import ToolsPage from './pages/ToolsPage'
 import ImageCompressor from './pages/tools/ImageCompressor'
 import FormatConverter from './pages/tools/FormatConverter'
@@ -46,8 +44,6 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="workspace" element={<FocusWorkspace />} />
             <Route path="attendance" element={<Attendance />} />
-            <Route path="squad" element={<SquadHuddle />} />
-            <Route path="vault" element={<SnippetVault />} />
             <Route path="resources" element={<ResourceLibrary />} />
             <Route path="resources/admin" element={<AdminModeration />} />
             <Route path="tools" element={<ToolsPage />} />
