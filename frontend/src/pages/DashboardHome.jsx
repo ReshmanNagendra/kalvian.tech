@@ -2,16 +2,13 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 const quickApps = [
-  { name: 'Focus Workspace', icon: '💻', path: '/dashboard/workspace', desc: 'Split-screen IDE', color: 'from-emerald-500/20 to-emerald-500/5' },
-  { name: 'Attendance', icon: '📊', path: '/dashboard/attendance', desc: 'Attendance tracker', color: 'from-amber-500/20 to-amber-500/5' },
-  { name: 'Resources', icon: '📚', path: '/dashboard/resources', desc: 'Study materials', color: 'from-rose-500/20 to-rose-500/5' },
-  { name: 'Quick Tools', icon: '🛠️', path: '/dashboard/tools', desc: 'Utilities suite', color: 'from-orange-500/20 to-orange-500/5' },
+  { name: 'Focus Workspace', icon: '💻', path: '/dashboard/workspace', desc: 'Dual pane setup', color: 'from-sky-500/20 to-sky-500/5' },
+  { name: 'Utilities', icon: '🛠️', path: '/dashboard/tools', desc: 'Quick tools', color: 'from-amber-500/20 to-amber-500/5' },
 ]
 
 const tips = [
   "Use the Focus Workspace to keep your Dojo problem visible while coding.",
-  "Check the Attendance tracker to see your current standing and safe margin.",
-  "Upload your notes to Resource Library — help your batch, earn upvotes.",
+  "Connect your calendar to get real-time alerts before class starts."
 ]
 
 export default function DashboardHome() {
@@ -76,7 +73,7 @@ export default function DashboardHome() {
           </div>
           <div className="p-4 rounded-xl bg-surface-card border border-surface-border">
             <p className="text-[11px] font-medium text-text-muted uppercase tracking-wider mb-1">Universities</p>
-            <p className="text-2xl font-bold text-brand-400 tabular-nums">21</p>
+            <p className="text-2xl font-bold text-brand-400 tabular-nums">15+</p>
           </div>
           <div className="p-4 rounded-xl bg-surface-card border border-surface-border">
             <p className="text-[11px] font-medium text-text-muted uppercase tracking-wider mb-1">Status</p>

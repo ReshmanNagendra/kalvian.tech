@@ -18,9 +18,7 @@ export default function DashboardLayout() {
   
   const navItems = [
     { name: 'Focus Workspace', path: '/dashboard/workspace', icon: '💻' },
-    { name: 'Attendance', path: '/dashboard/attendance', icon: '📊' },
-    { name: 'Quick Utilities', path: '/dashboard/tools', icon: '🛠️' },
-    { name: 'Resource Library', path: '/dashboard/resources', icon: '📚' }
+    { name: 'Quick Utilities', path: '/dashboard/tools', icon: '🛠️' }
   ]
 
   return (

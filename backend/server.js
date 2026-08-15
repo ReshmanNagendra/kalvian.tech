@@ -4,7 +4,6 @@ const cors = require("cors");
 require("dotenv").config();
 
 const waitlistRoutes = require("./routes/waitlist");
-const attendanceRoutes = require("./routes/attendance");
 
 const app = express();
 
@@ -39,7 +38,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/waitlist", waitlistRoutes);
-app.use("/api/attendance", attendanceRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5002;

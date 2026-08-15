@@ -11,13 +11,6 @@ export default function LandingPage() {
       link: '/dashboard/workspace'
     },
     {
-      title: 'Attendance Strategist',
-      description: 'Know exactly how many sessions you can skip before dropping into the danger zone.',
-      icon: '📊',
-      status: 'Live',
-      link: '/dashboard/attendance'
-    },
-    {
       title: 'Resource Library',
       description: 'Crowd-sourced PDFs and cheatsheets. Upvote the best materials.',
       icon: '📚',
