@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 
 const quickApps = [
   { name: 'Focus Workspace', icon: '💻', path: '/dashboard/workspace', desc: 'Dual pane setup', color: 'from-sky-500/20 to-sky-500/5' },
+  { name: 'Leaderboard', icon: '🏆', path: '/dashboard/leaderboard', desc: 'Rankings & stats', color: 'from-purple-500/20 to-purple-500/5' },
   { name: 'Utilities', icon: '🛠️', path: '/dashboard/tools', desc: 'Quick tools', color: 'from-amber-500/20 to-amber-500/5' },
 ]
 

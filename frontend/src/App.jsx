@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import DashboardLayout from './components/layout/DashboardLayout'
 import FocusWorkspace from './pages/FocusWorkspace'
+import Leaderboard from './pages/Leaderboard'
 import ToolsPage from './pages/ToolsPage'
 import ImageCompressor from './pages/tools/ImageCompressor'
 import FormatConverter from './pages/tools/FormatConverter'
@@ -40,6 +41,7 @@ function App() {
             <Route index element={<DashboardHome />} />
             <Route path="settings" element={<Settings />} />
             <Route path="workspace" element={<FocusWorkspace />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="tools" element={<ToolsPage />} />
             <Route path="tools/image-compressor" element={<ImageCompressor />} />
             <Route path="tools/format-converter" element={<FormatConverter />} />
